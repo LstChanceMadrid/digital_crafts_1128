@@ -54,12 +54,12 @@ export default class Header extends Component {
 	};
 
 
-	handleTextBoxOnChange = (e) => {
+	handleSearchTextBoxOnChange = (e) => {
 		console.log(e.target.name)
 		console.log(e.target.value)
 
 		this.setState({
-			search : e.target.value
+			[e.target.name] : e.target.value
 		})
 	}
 
@@ -67,7 +67,7 @@ export default class Header extends Component {
 
 		e.preventDefault();
 
-		const response =  await fetch('/api/world', {
+		const response =  await fetch('/api/search', {
 			method: 'POST',
 			headers : {
 				'Content-Type' : 'application/json'
@@ -90,9 +90,9 @@ export default class Header extends Component {
 			<nav className="nav-container">
 				<ul className="nav-list">
 					<li><Link to = "/">Home</Link></li>
-						{/* // #link and navlink can be accessed form .nav-list a */}
+{/* // #link and navlink can be accessed form .nav-list a */}
 
-					<li>My Books</li>
+					<li><Link to = "/my-books">My Books</Link></li>
 
 					<li>Browse <i className="fa fa-caret-down"></i></li>
 
@@ -100,15 +100,15 @@ export default class Header extends Component {
 
 					<div  className="search-bar-container">
 						<form onSubmit={this.handleSearchButtonClick}>
-							<input className="search-bar"  type="text" onChange={this.handleTextBoxOnChange} name="search" placeholder="Search" value={this.state.search} />
+							<input className="search-bar"  type="text" onChange={this.handleSearchTextBoxOnChange} name="search" placeholder="Search" value={this.props.search} />
 
 							<input className="magnifying-glass" type="submit" value="" />
 						</form>
 					</div>
 					
-					<li>Sign In</li>
+					<li><Link to = "/api/login">Sign In</Link></li>
 
-					<li>Join</li>
+					<li><Link to = "/api/register">Join</Link></li>
 
 					<i id="hamburger" className="fa fa-bars"></i>
 				</ul>

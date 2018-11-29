@@ -14,14 +14,14 @@ export default class BookList extends Component {
 
     let bookItems = this.props.books.map((book, index) => {
         return (<div>
-            <div>{book.title}</div>
-            <img src={`${IMAGES_URL}${book.imageLink}`} />
+              <div>{book.title}</div>
+              <img src={`${IMAGES_URL}${book.imageLink}`} alt={`${book.title}'s book cover`}/>
             </div>
         )
     })
 
     return (
-      <div>
+      <div className="book-list-container">
         {bookItems}
       </div>
     )

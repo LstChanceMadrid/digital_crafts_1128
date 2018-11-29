@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import BookList from './BookList'
 import Menu from './Menu'
 
-const BOOKS_URL = "https://raw.githubusercontent.com/benoitvallon/100-best-books/master/books.json"
+const MY_BOOKS_URL = "/my-books"
 
 
 export default class Content extends Component {
@@ -18,7 +18,7 @@ export default class Content extends Component {
     
     componentDidMount() {
 
-        fetch(BOOKS_URL).then(response => {
+        fetch(MY_BOOKS_URL).then(response => {
             return response.json()
         }).then(json => {
 
@@ -32,7 +32,7 @@ export default class Content extends Component {
     render() {
         return (
             <div className="content-container">
-                <h1 className="page-title">Home</h1>
+                hellloo
                 
                 <Menu />
                 <BookList books = {this.state.books}/>

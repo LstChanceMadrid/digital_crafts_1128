@@ -8,7 +8,8 @@ export default class BaseLayout extends Component {
 		return (
 			<div className="App">
 				<Header />
-				{this.props.children}
+					<div className="header-padding"></div>
+					{this.props.children}
 				<Footer />
 			</div>
 		);

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import axios from 'axios'
+import {setAuthenticationToken} from '../utils'
 
-
-const LOGIN_URL = 'http://localhost:3000/login'
+const LOGIN_URL = 'http://localhost:3000/api/login'
 
 
 
@@ -16,20 +17,20 @@ export default class Login extends Component {
         }
     }
 
-    handleLoginButtonCLick() {
+    handleLoginButtonCLick = async e => {
+
         let user = this.state.user;
 
-        fetch(LOGIN_URL, {
-            method : 'POST',
-            headers : {
-                'ContentType' : 'application/json'
-            },
-            body : JSON.stringify(user)
+        e.preventDefault();
+
+        console.log(user)
+        axios.post(LOGIN_URL, {
+            username : user.username,
+            password : user.password
         }).then(response => {
-            return response.json()
-        }).then(json => {
-            console.log(json)
-            this.props.history.push('/')
+            localStorage.setItem('jsonwebtoken', response.data.token)
+
+            setAuthenticationToken(response.data.token)
         })
     }
 
@@ -46,11 +47,11 @@ export default class Login extends Component {
     render() {
         return (
             <div className="login-form-container">
-                <h1 class="page-title">Login</h1>
+                <h1 className="page-title">Login</h1>
                 <form onSubmit={this.handleLoginButtonCLick}>
-                    <input type="text" name="username" placeholder="Username" onChange={this.handleTextBoxChange} autoFocus required />
+                    <input type="text" name="username" placeholder="Username" onChange={this.handleTextBoxChange} autoFocus autoComplete="true" required />
 
-                    <input type="text" name="password" placeholder="Password" onChange={this.handleTextBoxChange} required />
+                    <input type="password" name="password" placeholder="Password" onChange={this.handleTextBoxChange} autoComplete="true" required />
 
                     <input type="submit" value="Log In" />
                 </form>

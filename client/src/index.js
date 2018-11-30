@@ -7,6 +7,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import App from './components/App';
 import Register from './components/Register';
 import Login from './components/Login';
+import MyBooks from './components/MyBooks';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -15,6 +16,7 @@ ReactDOM.render(
                 <Route exact path="/" component={App} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
+                <Route exact path="/my-books" component={MyBooks} />
             </Switch>
         </BaseLayout>
      </BrowserRouter>

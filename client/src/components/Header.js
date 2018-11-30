@@ -90,7 +90,7 @@ export default class Header extends Component {
 			<nav className="nav-container">
 				<ul className="nav-list">
 					<li><Link to = "/">Home</Link></li>
-{/* // #link and navlink can be accessed form .nav-list a */}
+						{/* // #link and navlink can be accessed form .nav-list a */}
 
 					<li><Link to = "/my-books">My Books</Link></li>
 
@@ -106,9 +106,9 @@ export default class Header extends Component {
 						</form>
 					</div>
 					
-					<li><Link to = "/api/login">Sign In</Link></li>
+					<li><Link to = "/login">Log In</Link></li>
 
-					<li><Link to = "/api/register">Join</Link></li>
+					<li><Link to = "/register">Register</Link></li>
 
 					<i id="hamburger" className="fa fa-bars"></i>
 				</ul>

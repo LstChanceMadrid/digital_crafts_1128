@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react'
 import BookList from './BookList'
-import Menu from './Menu'
 
 const BOOKS_URL = "https://raw.githubusercontent.com/benoitvallon/100-best-books/master/books.json"
 
@@ -34,7 +33,6 @@ export default class Content extends Component {
             <div className="content-container">
                 <h1 className="page-title">Home</h1>
                 
-                <Menu />
                 <BookList books = {this.state.books}/>
             </div>
         )

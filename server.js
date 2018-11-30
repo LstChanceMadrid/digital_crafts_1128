@@ -7,62 +7,157 @@ const db= pgp(connectionString);
 const port = process.env.PORT || 5000;
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const cors = require('cors')
+const jwt = require('jsonwebtoken')
 
-
-
-
-
+app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const authenticate = (req, res, next) => {
+	let authorizationHeader = req.headers["authorization"]
+	
+	if (!authorizationHeader) {
+		res.status(400).json({error : 'Authroization failed'})
+		return
+	}
 
-app.post('/api/search', (req, res) => {
+	const token = authorizationHeader.split(' ')[1]
 
-  let post = req.body.search
-//SQL to find it in
-  db.any('INSERT INTO history (search) VALUES ($1)', [post])
-  res.send(
-    `I received your POST request. This is what you sent me: ${post}`,
-  );
-});
+	jwt.verify(token, 'somereallylongsecretkeytomakesureourauthenticatestuffisawesome', (error, decoded) => {
+
+		if (decoded) {
+			let username = decoded.username
+
+			db.one("SELECT username FROM users WHERE username = $1", [username]).then(user => {
+
+				return user.username === username
+		})
+			if (username) {
+				next()
+			} else {
+				res.status(400).json({error: 'Nope'})
+			}
+		}
+	})
+}
+
+
+
+
+
 
 
 
 app.post('/api/register', (req, res) => {
 
+	let username = req.body.username;
+	let firstname = req.body.firstname;
+	let lastname = req.body.lastname;
+	let email = req.body.email;
+	let password = req.body.password;
 
-  console.log(username)
+	db.none('SELECT username FROM users WHERE username = $1', [username]).then(() => {
+		bcrypt.hash(password, saltRounds).then(hash => {
 
-  app.none('SELECT username FROM users WHERE username = $1', [username]).then(() => {
-    bcrypt.hash(password, saltRounds).then(hash => {
-
-      app.any('INSERT INTO users (username,firstname,lastname,email,password) VALUES ($1,$2,$3,$4,$5)', [username, firstname, lastname, email, hash])
-      }).then(user => {
-        res.redirect('/' + user.username + 'home');
-      }).catch(e => {
-
-      if (e.name === 'QueryResultError') {
-        res.redirect('..');
-      } else {
-        console.log(e);    
-      }
-    })
-  })
+		db.any('INSERT INTO users (username,firstname,lastname,email,password) VALUES ($1,$2,$3,$4,$5)', [username, firstname, lastname, email, hash])
+		}).then(user => {
+			res.json({success : true, message : 'You registered!'});
+		}).catch(e => {
+			if (e.name === 'QueryResultError') {
+				res.redirect('..');
+			} else {
+				console.log(e);    
+			}
+		})
+	})
 })
 
+
+app.post('/api/login', (req, res) => {
+
+	let username = req.body.username
+	let password = req.body.password
+	console.log('user login here')
+	db.one('SELECT username, id, password FROM users WHERE username = $1', [username]).then(user => {
+		bcrypt.compare(password, user.password).then(result => {
+			if (result) {
+				const token = jwt.sign({username : user.username}, 'somereallylongsecretkeytomakesureourauthenticatestuffisawesome')
+
+				res.json({token : token})
+			} else {
+				res.json({success: false, message: 'Password is incorrect'})
+			}
+			
+		});
+	})
+})
+
+
+
+
+
+
+
+
+
+
+app.post('/api/search', (req, res) => {
+
+	let post = req.body.search
+	//SQL to find it in
+	db.any('INSERT INTO history (search) VALUES ($1)', [post])
+	res.send(
+		`I received your POST request. This is what you sent me: ${post}`,
+	);
+});
+
+
+
+
+
+
+
+
+app.get('/api/my-books',authenticate, (req, res) => {
+
+	let username = 'steve';
+
+	db.any('SELECT books.title FROM books').then(books => {
+		res.json({books : books})
+	})
+	
+	// db.all('SELECT books.*, users.id, users.username FROM books INNER JOIN users WHERE users.username = $1', [username]).then(result => {
+	// 	console.log(result)
+	// 	res.json({books : result});
+	// })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+  	res.send({ express: 'Hello From Express' });
 });
 
 app.get('/api/world', (req, res) => {
-  res.send([{search : req.body.search}])
+  	res.send([{search : req.body.search}])
 })
-
-app.get('/:username/api/my-books', (req, res) => {
-  db.all('SELECT * FROM books WHERE users.username = $1')
-})
-
-
 
 
 

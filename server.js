@@ -121,8 +121,6 @@ app.post('/api/search', (req, res) => {
 
 app.get('/api/my-books',authenticate, (req, res) => {
 
-	let username = 'steve';
-
 	db.any('SELECT books.title FROM books').then(books => {
 		res.json({books : books})
 	})

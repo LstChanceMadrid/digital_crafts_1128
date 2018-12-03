@@ -33,12 +33,11 @@ export default class MyBooks extends Component {
         })
     }
 
-    handleDeleteBookClick = () => {
-
+    handleDeleteBookClick = (book) => {
+        console.log(book)
     }
 
-    handleUpdateBookClick = () => {
-        console.log(this.bookItem.title)
+    handleUpdateBookClick = (book) => {
         
     }
 
@@ -50,7 +49,7 @@ export default class MyBooks extends Component {
                 <div>
                     <div key={bookItem.index}>{bookItem.title}</div>
                     <input type="hidden" name="hidden" value={bookItem.title} />
-                    <input type="submit" onSubmit={this.handleUpdateBookClick} value="Update Book" />
+                    <input type="submit" onSubmit={this.handleUpdateBookClick(bookItem.title)} value="Update Book" />
                     <input type="submit" onSubmit={this.handleDeleteBookClick} value="Delete Book" />
                 </div>
             )

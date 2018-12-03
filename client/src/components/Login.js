@@ -14,7 +14,6 @@ export default class Login extends Component {
 
         this.state = {
             user : {},
-            isAuthenticated : false
         }
     }
 
@@ -32,11 +31,6 @@ export default class Login extends Component {
             localStorage.setItem('jsonwebtoken', response.data.token)
 
             setAuthenticationToken(response.data.token)
-
-            this.setState({
-                ...this.state,
-                isAuthenticated : true
-            })
         })
     }
 
@@ -51,6 +45,7 @@ export default class Login extends Component {
     }
 
     render() {
+        console.log(this.props)
         return (
             <div className="login-form-container">
                 <h1 className="page-title">Login</h1>

@@ -12,7 +12,7 @@ export default class Header extends Component {
 		this.state = {
 			response : '',
 			search : '',
-			responseToSearch : ''
+			responseToSearch : '',
 		}
 	}
 
@@ -57,7 +57,6 @@ export default class Header extends Component {
 		const body = await response.text();
 
 		this.setState({responseToSearch : body});
-		console.log(this.state.responseToSearch)
 	}
 
 

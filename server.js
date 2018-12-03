@@ -32,7 +32,7 @@ const authenticate = (req, res, next) => {
 			db.one("SELECT username FROM users WHERE username = $1", [username]).then(user => {
 
 				return user.username === username
-		})
+		}).catch(e => {console.log(e)})
 			if (username) {
 				next()
 			} else {
@@ -88,7 +88,6 @@ app.post('/api/login', (req, res) => {
 			} else {
 				res.json({success: false, message: 'Password is incorrect'})
 			}
-			
 		});
 	})
 })
@@ -123,8 +122,9 @@ app.get('/api/my-books',authenticate, (req, res) => {
 
 	db.any('SELECT books.title FROM books').then(books => {
 		res.json({books : books})
-	})
-	
+	}).catch(e => console.log(e))
+
+
 	// db.all('SELECT books.*, users.id, users.username FROM books INNER JOIN users WHERE users.username = $1', [username]).then(result => {
 	// 	console.log(result)
 	// 	res.json({books : result});

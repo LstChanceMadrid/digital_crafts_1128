@@ -13,7 +13,8 @@ export default class Login extends Component {
         super(props)
 
         this.state = {
-            user : {}
+            user : {},
+            isAuthenticated : false
         }
     }
 
@@ -31,6 +32,11 @@ export default class Login extends Component {
             localStorage.setItem('jsonwebtoken', response.data.token)
 
             setAuthenticationToken(response.data.token)
+
+            this.setState({
+                ...this.state,
+                isAuthenticated : true
+            })
         })
     }
 

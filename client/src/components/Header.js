@@ -16,16 +16,8 @@ export default class Header extends Component {
 		}
 	}
 
-	// state = {
-	// 	response : '',
-	// 		search : '',
-	// 		responseToSearch : ''
-	// }
 
 	componentDidMount() {
-		this.callApi()
-		  .then(res => this.setState({ response: res.express }))
-		  .catch(err => console.log(err));
 
 		  this.callSearchApi().then(res => {
 			  this.setState({search : res.search})
@@ -42,21 +34,8 @@ export default class Header extends Component {
 
 		return body
 	}
-	
-
-	callApi = async () => {
-		const response = await fetch('/api/hello');
-		const body = await response.json();
-
-		if (response.status !== 200) throw Error(body.message);
-
-		return body;
-	};
-
 
 	handleSearchTextBoxOnChange = (e) => {
-		console.log(e.target.name)
-		console.log(e.target.value)
 
 		this.setState({
 			[e.target.name] : e.target.value
@@ -83,14 +62,10 @@ export default class Header extends Component {
 
 
 	render() {
-		return (
-		<div className="header-container">
-			<label><NavLink className="logo" to = "/">good<b>reads</b></NavLink></label>
 
-			<nav className="nav-container">
-				<ul className="nav-list">
+		const headerAuthenticated = () => {
+			return <ul className="nav-list">
 					<li><Link to = "/">Home</Link></li>
-						{/* // #link and navlink can be accessed form .nav-list a */}
 
 					<li><Link to = "/my-books">My Books</Link></li>
 
@@ -112,9 +87,39 @@ export default class Header extends Component {
 
 					<i id="hamburger" className="fa fa-bars"></i>
 				</ul>
-			</nav>
 
-			<p>{this.state.responseToSearch}</p>
+		}
+
+		const headerNotAuthenticated = () => {
+			return <ul className="nav-list">
+			<li><Link to = "/">Home</Link></li>
+
+			<li>Browse <i className="fa fa-caret-down"></i></li>
+
+			<li>Community <i className="fa fa-caret-down"></i></li>
+
+			<div  className="search-bar-container">
+				<form onSubmit={this.handleSearchButtonClick}>
+					<input className="search-bar"  type="text" onChange={this.handleSearchTextBoxOnChange} name="search" placeholder="Search" value={this.props.search} />
+
+					<input className="magnifying-glass" type="submit" value="" />
+				</form>
+			</div>
+			
+			<li><Link to = "/logout">Log Out</Link></li>
+
+
+			<i id="hamburger" className="fa fa-bars"></i>
+		</ul>
+		}
+
+		return (
+		<div className="header-container">
+			<label><NavLink className="logo" to = "/">good<b>reads</b></NavLink></label>
+
+			<nav className="nav-container">
+				{this.props.isAuthenticated ? headerAuthenticated() : headerNotAuthenticated()}
+			</nav>
 		</div>
 
 
